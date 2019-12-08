@@ -4,7 +4,6 @@ import time
 
 import numpy as np
 import pandas as pd
-
 from .entities import Snake, Field, CellType, SnakeAction, ALL_SNAKE_ACTIONS
 
 
@@ -13,6 +12,8 @@ class Environment(object):
     Represents the RL environment for the Snake game that implements the game logic,
     provides rewards for the agent and keeps track of game statistics.
     """
+
+    flag = True
 
     def __init__(self, config, verbose=1):
         """
@@ -25,6 +26,7 @@ class Environment(object):
                 1 = write a CSV file containing the statistics for every episode;
                 2 = same as 1, but also write a full log file containing the state of each timestep.
         """
+
         self.field = Field(level_map=config['field'])
         self.snake = None
         self.fruit = None
@@ -132,12 +134,14 @@ class Environment(object):
         if self.snake.peek_next_move() == self.goodFruit:
             goodFruitReward = self.rewards['ate_good_fruit']
             # for i in range(0, goodFruitReward):
-            self.leftToReward = 5
+            self.leftToReward = 50
             self.isReward = True
                 # self.snake.grow()
             # old_tail = None
             reward += self.rewards['ate_good_fruit'] * self.snake.length
-            self.stats.fruits_eaten += 5
+            self.stats.fruits_eaten += 50
+            # if self.stats.fruits_eaten>=50:
+
 
         # Are we about to eat the fruit?
         if self.snake.peek_next_move() == self.fruit:
@@ -146,6 +150,7 @@ class Environment(object):
             old_tail = None
             reward += self.rewards['ate_fruit'] * self.snake.length
             self.stats.fruits_eaten += 1
+
 
 
         # If not, just move forward.
@@ -168,9 +173,14 @@ class Environment(object):
 
         # Hit a wall or own body?
         if not self.is_alive():
+
+
+
             if self.has_hit_wall():
+                Environment.flag = False
                 self.stats.termination_reason = 'hit_wall'
             if self.has_hit_own_body():
+                Environment.flag = False
                 self.stats.termination_reason = 'hit_own_body'
 
             self.field[self.snake.head] = CellType.SNAKE_HEAD
@@ -213,9 +223,13 @@ class Environment(object):
         """ True if the snake has hit its own body, False otherwise. """
         return self.field[self.snake.head] == CellType.SNAKE_BODY
 
+    def has_passed(self):
+        return self.stats.fruits_eaten > 50
+
+
     def is_alive(self):
         """ True if the snake is still alive, False otherwise. """
-        return not self.has_hit_wall() and not self.has_hit_own_body()
+        return not self.has_hit_wall() and not self.has_hit_own_body() and not self.has_passed()
 
 
 class TimestepResult(object):

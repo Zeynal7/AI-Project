@@ -5,7 +5,6 @@
 import json
 import sys
 import numpy as np
-
 from snakeai.gameplay.environment import Environment
 from snakeai.gui import PyGameGUI
 from snakeai.utils.cli import HelpOnFailArgumentParser
@@ -73,7 +72,7 @@ def load_model(filename):
 def create_agent(name, model):
     """
     Create a specific type of Snake AI agent.
-    
+
     Args:
         name (str): key identifying the agent type.
         model: (optional) a pre-trained model required by certain agents.
@@ -100,7 +99,7 @@ def play_cli(env, agent, num_episodes=10):
     """
     Play a set of episodes using the specified Snake agent.
     Use the non-interactive command-line interface and print the summary statistics afterwards.
-    
+
     Args:
         env: an instance of Snake environment.
         agent: an instance of Snake agent.
@@ -136,7 +135,7 @@ def play_gui(env, agent, num_episodes):
     """
     Play a set of episodes using the specified Snake agent.
     Use the interactive graphical interface.
-    
+
     Args:
         env: an instance of Snake environment.
         agent: an instance of Snake agent.
@@ -149,9 +148,8 @@ def play_gui(env, agent, num_episodes):
     gui.run(num_episodes=num_episodes)
 
 
-def main():
+def lib():
     parsed_args = parse_command_line_args(sys.argv[1:])
-
     env = create_snake_environment(parsed_args.level)
     model = load_model(parsed_args.model) if parsed_args.model is not None else None
     agent = create_agent(parsed_args.agent, model)
@@ -159,6 +157,37 @@ def main():
     run_player = play_cli if parsed_args.interface == 'cli' else play_gui
     run_player(env, agent, num_episodes=parsed_args.num_episodes)
 
+def sb(level):
+    parsed_args = parse_command_line_args(sys.argv[1:])
+    env = create_snake_environment(level)
+    model = load_model(parsed_args.model) if parsed_args.model is not None else None
+    agent = create_agent(parsed_args.agent, model)
+
+    run_player = play_cli if parsed_args.interface == 'cli' else play_gui
+    run_player(env, agent, num_episodes=parsed_args.num_episodes)
+
+    pass
+
+levels = [
+    "10x10-blank",
+    "10x10-obstacles"
+]
+
+
+
+
 
 if __name__ == '__main__':
-    main()
+    for i in levels:
+        print(Environment.flag)
+        if Environment.flag:
+            sb('snakeai/levels/' + i + '.json')
+
+    # lib()
+    # if flag:
+    #     sb('snakeai/levels/10x10-obstacles.json')
+
+
+    # print("endedLibrary")
+
+

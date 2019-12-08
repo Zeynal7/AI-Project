@@ -9,9 +9,9 @@ class PyGameGUI:
     """ Provides a Snake GUI powered by Pygame. """
 
     FPS_LIMIT = 60
-    AI_TIMESTEP_DELAY = 100
-    HUMAN_TIMESTEP_DELAY = 50
-    CELL_SIZE = 10
+    AI_TIMESTEP_DELAY = 10
+    HUMAN_TIMESTEP_DELAY = 60
+    CELL_SIZE = 15
 
     SNAKE_CONTROL_KEYS = [
         pygame.K_UP,

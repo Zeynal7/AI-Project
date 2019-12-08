@@ -20,7 +20,7 @@ def test_env_on_first_episode_has_consistent_initial_state():
     env = load_env('10x10-blank')
     env.new_episode()
 
-    assert env.field.size == 99
+    assert env.field.size == 52
     assert env.snake.head == (5, 4)
     assert env.timestep_index == 0
     assert env.fruit is not None
@@ -146,7 +146,7 @@ def test_env_when_new_episode_starts_resets_previous_state():
 
     env.new_episode()
 
-    assert env.field.size == 99
+    assert env.field.size == 52
     assert env.snake.head == (5, 4)
     assert env.timestep_index == 0
     assert env.fruit is not None
